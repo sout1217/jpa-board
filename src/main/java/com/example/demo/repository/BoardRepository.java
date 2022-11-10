@@ -1,4 +1,7 @@
 package com.example.demo.repository;
 
-public interface BoardRepository extends org.springframework.data.jpa.repository.JpaRepository<com.example.demo.entity.Board, java.lang.Integer> {
+import com.example.demo.entity.Board;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface BoardRepository extends JpaRepository<Board, Integer> {
 }

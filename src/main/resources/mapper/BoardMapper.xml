@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.demo.mapper.BoardMapper">
+    <!--========================================== INSERT ============================================== -->
+
+    <!--========================================== UPDATE ============================================== -->
+
+    <!--========================================== DELETE ============================================== -->
+
+    <!--========================================== SELECT ============================================== -->
+
+
+    <select id="findAll" resultType="board">
+        select *
+        from BOARD;
+    </select>
+
+    <insert id="save" parameterType="board" useGeneratedKeys="true" keyProperty="id">
+        INSERT INTO BOARD (title, content, isTop)
+        VALUES (#{title}, #{content}, #{isTop})
+    </insert>
+
+    <select id="findById" resultType="board">
+        SELECT *
+        FROM BOARD
+        WHERE ID = #{ID}
+    </select>
+
+    <select id="findAllWithPage" resultType="com.example.demo.entity.Board">
+        select * from BOARD
+        <if test="pageable != null and pageable.pageNumber">
+            limit #{pageable.pageNumber}, #{pageable.pageSize}
+        </if>
+    </select>
+
+    <select id="findAllWithPageAndSort" resultType="com.example.demo.entity.Board">
+        select * from BOARD BD
+
+        <if test="pageable.sort != null">
+            <trim prefix="order by">
+                -- 정렬
+                BD.isTop DESC,
+                <foreach item="order" collection="pageable.sort" separator=", " close=",">
+                    -- 순회
+                    ${order.property} ${order.direction}
+                </foreach>
+                BD.id DESC
+            </trim>
+        </if>
+
+        <if test="pageable != null and pageable.pageNumber">
+            limit #{pageable.pageNumber}, #{pageable.pageSize}
+        </if>
+    </select>
+</mapper>

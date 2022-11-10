@@ -1,0 +1,12 @@
+# 게시글 생성
+POST {{url}}/boards
+Content-Type: application/json
+
+< fixtures/board-post.json
+
+###
+
+# 게시글 리스트 조회
+GET {{url}}/boards
+
+

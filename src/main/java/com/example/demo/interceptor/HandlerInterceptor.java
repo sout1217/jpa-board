@@ -1,2 +1,7 @@
-package com.example.demo.interceptor;public class HandlerInterceptor {
+package com.example.demo.interceptor;
+
+import org.springframework.stereotype.Component;
+
+@Component
+public class HandlerInterceptor {
 }

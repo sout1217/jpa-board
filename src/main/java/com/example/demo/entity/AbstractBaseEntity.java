@@ -14,7 +14,7 @@ import java.time.LocalDateTime;
 @Getter
 @MappedSuperclass // MEMO: 2022/10/23 상속한 엔티티들은 부모클래스의 필드들을 컬럼으로 인식한다
 @EntityListeners(AuditingEntityListener.class) // Listener 활성화
-public abstract class BaseEntity {
+public abstract class AbstractBaseEntity {
 
     @CreatedDate
     protected LocalDateTime createdAt;

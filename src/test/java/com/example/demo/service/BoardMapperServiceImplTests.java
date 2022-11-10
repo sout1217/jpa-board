@@ -2,26 +2,32 @@ package com.example.demo.service;
 
 import com.example.demo.entity.Board;
 import com.example.demo.mapper.BoardMapper;
-import com.github.pagehelper.PageInfo;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.test.context.jdbc.Sql;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
+@Sql("classpath:/test/sql/boardInit.sql") // MEMO: 2022/10/23 @Transaction 이 auto_increment 까지는 해주지 않아 별도로 추가 DDL 사용
 @SpringBootTest
-class BoardServiceTests {
+@Transactional
+class BoardMapperServiceImplTests {
 
     /**
      * 참고 Url https://velog.io/@hanblueblue/%ED%94%84%EB%A1%9C%EC%A0%9D%ED%8A%B82-myBatis-%EC%84%A4%EC%A0%95
      */
 
     @Autowired
-    private BoardService boardService;
+    @Qualifier("boardMapperServiceImpl")
+    private BoardService boardMapperServiceImpl;
 
     @Autowired
     private BoardMapper boardMapper;
@@ -39,26 +45,37 @@ class BoardServiceTests {
     @Test
     @DisplayName("단건 조회")
     void test2() {
+        // board talbe get last index
+
         Board abc = Board.builder().title("abc").build();
         boardMapper.save(abc);
-        Board board = boardService.getBoard(1);
-        System.err.println(board);
+
+        boardMapper.findAll().forEach(board ->
+                System.err.println("값: " + board)
+        );
+
+        Board board = boardMapperServiceImpl.getBoard(1);
+
     }
 
     @Test
     @DisplayName("리스트 조회")
     void test3() {
-        List<Board> boards = boardService.getBoards();
-        assertThat(boards).hasSize(10);
+        Board board;
+        for (int i = 0; i < 20; i++) {
+            board = Board.builder().title("게시글 " + i).build();
+            boardMapper.save(board);
+        }
+
+        List<Board> boards = boardMapperServiceImpl.getBoards();
+        assertThat(boards).hasSize(20);
     }
 
     @Test
     @DisplayName("페이징 조회")
     void test4() {
         Integer boardId = 1;
-        PageInfo<Board> boardsWithPage = boardService.getBoardsWithPage(boardId, PageRequest.of(1, 10));
-
-
+        Page<Board> boardsWithPage = boardMapperServiceImpl.getBoardsWithPage(PageRequest.of(1, 10));
         System.out.println(boardsWithPage);
     }
 }

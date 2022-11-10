@@ -1,10 +1,13 @@
 package com.example.demo.dto;
 
+import lombok.Getter;
+
 import java.time.LocalDateTime;
 
-public interface BaseResponseDTO {
-    LocalDateTime getCreatedAt();
-    LocalDateTime getUpdatedAt();
-    String getLastModifiedBy();
-    String getCreatedBy();
+@Getter
+public abstract class AbstractBaseResponseDTO {
+    protected LocalDateTime createdAt;
+    protected LocalDateTime updatedAt;
+    protected String lastModifiedBy;
+    protected String createdBy;
 }
